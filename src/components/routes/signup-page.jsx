@@ -1,6 +1,8 @@
-import { Link } from "react-router";
+import { Link, redirect } from "react-router";
 import { SignupForm } from "@/components/signup-form";
 import { PackageSearch } from "lucide-react";
+import { usernameSchema, passwordSchema } from "@/../libs/validation";
+import { z } from "zod";
 
 export default function SignupPage() {
   return (
@@ -25,7 +27,38 @@ export async function action({ request }) {
   let formData = await request.formData();
   let username = formData.get("username");
   let password = formData.get("password");
-  console.log(username, password);
 
-  return null;
+  try {
+    usernameSchema.parse(username);
+  } catch (e) {
+    if (e instanceof z.ZodError) {
+      for (let i of e.issues) {
+        return { username: i.message };
+      }
+    }
+  }
+
+  try {
+    passwordSchema.parse(password);
+  } catch (e) {
+    if (e instanceof z.ZodError) {
+      for (let i of e.issues) {
+        return { password: i.message };
+      }
+    }
+  }
+
+  const res = await fetch("/api/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ username, password }),
+  });
+
+  if (res.status === 201) {
+    return redirect("/");
+  } else {
+    return { _form: "Something went wrong." };
+  }
 }

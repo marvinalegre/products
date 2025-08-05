@@ -9,9 +9,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Form, Link } from "react-router";
+import { Form, Link, useActionData, useNavigation } from "react-router";
+import clsx from "clsx";
 
 export function SignupForm({ className, ...props }) {
+  const errors = useActionData();
+  const navigation = useNavigation();
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -19,9 +23,26 @@ export function SignupForm({ className, ...props }) {
           <Form method="post">
             <div className="grid gap-6">
               <div className="grid gap-6">
+                {errors?._form && (
+                  <p className="text-sm text-red-500 text-center">
+                    {errors?._form}
+                  </p>
+                )}
                 <div className="grid gap-3">
                   <Label htmlFor="username">Username</Label>
-                  <Input id="username" name="username" required />
+                  <Input
+                    id="username"
+                    name="username"
+                    className={clsx(
+                      errors?.username && "border-2 border-destructive",
+                    )}
+                    disabled={navigation.state !== "idle"}
+                  />
+                  {errors?.username && (
+                    <p className="text-sm text-red-500 -mt-1">
+                      {errors?.username}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-3">
                   <div className="flex items-center">
@@ -31,11 +52,23 @@ export function SignupForm({ className, ...props }) {
                     id="password"
                     name="password"
                     type="password"
-                    required
+                    className={clsx(
+                      errors?.password && "border-2 border-destructive",
+                    )}
+                    disabled={navigation.state !== "idle"}
                   />
+                  {errors?.password && (
+                    <p className="text-sm text-red-500 -mt-1">
+                      {errors?.password}
+                    </p>
+                  )}
                 </div>
-                <Button type="submit" className="w-full">
-                  Sign Up
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={navigation.state !== "idle"}
+                >
+                  {navigation.state !== "idle" ? "Signing Up..." : "Sign up"}
                 </Button>
               </div>
               <div className="text-center text-sm">
