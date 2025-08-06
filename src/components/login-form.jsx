@@ -36,7 +36,10 @@ export function LoginForm({ className, ...props }) {
                     className={clsx(
                       errors?.username && "border-2 border-destructive",
                     )}
-                    disabled={navigation.state !== "idle"}
+                    disabled={
+                      navigation.state !== "idle" &&
+                      navigation.location?.pathname === "/login"
+                    }
                   />
                   {errors?.username && (
                     <p className="text-sm text-red-500 -mt-1">
@@ -55,7 +58,10 @@ export function LoginForm({ className, ...props }) {
                     className={clsx(
                       errors?.password && "border-2 border-destructive",
                     )}
-                    disabled={navigation.state !== "idle"}
+                    disabled={
+                      navigation.state !== "idle" &&
+                      navigation.location?.pathname === "/login"
+                    }
                   />
                   {errors?.password && (
                     <p className="text-sm text-red-500 -mt-1">
@@ -66,9 +72,15 @@ export function LoginForm({ className, ...props }) {
                 <Button
                   type="submit"
                   className="w-full text-md font-semibold"
-                  disabled={navigation.state !== "idle"}
+                  disabled={
+                    navigation.state !== "idle" &&
+                    navigation.location?.pathname === "/login"
+                  }
                 >
-                  {navigation.state !== "idle" ? "Logging In..." : "Log In"}
+                  {navigation.state !== "idle" &&
+                  navigation.location?.pathname === "/login"
+                    ? "Logging In..."
+                    : "Log In"}
                 </Button>
               </div>
               <div className="text-center text-sm">

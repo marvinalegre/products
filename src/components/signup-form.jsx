@@ -15,6 +15,7 @@ import clsx from "clsx";
 export function SignupForm({ className, ...props }) {
   const errors = useActionData();
   const navigation = useNavigation();
+  console.log(navigation);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -36,7 +37,10 @@ export function SignupForm({ className, ...props }) {
                     className={clsx(
                       errors?.username && "border-2 border-destructive",
                     )}
-                    disabled={navigation.state !== "idle"}
+                    disabled={
+                      navigation.state !== "idle" &&
+                      navigation.location?.pathname === "/signup"
+                    }
                   />
                   {errors?.username && (
                     <p className="text-sm text-red-500 -mt-1">
@@ -55,7 +59,10 @@ export function SignupForm({ className, ...props }) {
                     className={clsx(
                       errors?.password && "border-2 border-destructive",
                     )}
-                    disabled={navigation.state !== "idle"}
+                    disabled={
+                      navigation.state !== "idle" &&
+                      navigation.location?.pathname === "/signup"
+                    }
                   />
                   {errors?.password && (
                     <p className="text-sm text-red-500 -mt-1">
@@ -66,9 +73,15 @@ export function SignupForm({ className, ...props }) {
                 <Button
                   type="submit"
                   className="w-full text-md font-semibold"
-                  disabled={navigation.state !== "idle"}
+                  disabled={
+                    navigation.state !== "idle" &&
+                    navigation.location?.pathname === "/signup"
+                  }
                 >
-                  {navigation.state !== "idle" ? "Signing Up..." : "Sign Up"}
+                  {navigation.state !== "idle" &&
+                  navigation.location?.pathname === "/signup"
+                    ? "Signing Up..."
+                    : "Sign Up"}
                 </Button>
               </div>
               <div className="text-center text-sm">
