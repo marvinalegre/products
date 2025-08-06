@@ -15,9 +15,6 @@
       "database_id": "c2c21485-47cb-4a7a-ad32-6ddfb59e7d4d"
     }
   ],
-  "vars": {
-    "JWT_SECRET": "foobar"
-  },
   "observability": {
     "enabled": true
   }
