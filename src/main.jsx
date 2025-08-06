@@ -5,9 +5,11 @@ import "./index.css";
 import App from "./App.jsx";
 import SignupPage, {
   action as signupAction,
+  loader as signupLoader,
 } from "@/components/routes/signup-page";
 import LoginPage, {
   action as loginAction,
+  loader as loginLoader,
 } from "@/components/routes/login-page";
 import { action as logoutAction } from "@/components/routes/logout.jsx";
 
@@ -28,11 +30,13 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <SignupPage />,
     action: signupAction,
+    loader: signupLoader,
   },
   {
     path: "/login",
     element: <LoginPage />,
     action: loginAction,
+    loader: loginLoader,
   },
   {
     path: "/logout",

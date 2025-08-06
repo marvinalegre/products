@@ -4,5 +4,5 @@ export async function action() {
   await fetch("/api/auth/logout", {
     method: "POST",
   });
-  return redirect("/signup");
+  return redirect("/login");
 }

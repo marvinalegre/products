@@ -65,7 +65,7 @@ export function LoginForm({ className, ...props }) {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full text-md font-semibold"
                   disabled={navigation.state !== "idle"}
                 >
                   {navigation.state !== "idle" ? "Logging In..." : "Log In"}

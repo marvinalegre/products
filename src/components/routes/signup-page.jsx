@@ -23,6 +23,14 @@ export default function SignupPage() {
   );
 }
 
+export async function loader() {
+  const res = await fetch("/api/auth/me");
+  if (res.status === 200) {
+    return redirect("/");
+  }
+  return null;
+}
+
 export async function action({ request }) {
   let formData = await request.formData();
   let username = formData.get("username");
