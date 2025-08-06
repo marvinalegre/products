@@ -6,6 +6,9 @@ import App from "./App.jsx";
 import SignupPage, {
   action as signupAction,
 } from "@/components/routes/signup-page";
+import LoginPage, {
+  action as loginAction,
+} from "@/components/routes/login-page";
 import { action as logoutAction } from "@/components/routes/logout.jsx";
 
 const router = createBrowserRouter([
@@ -25,6 +28,11 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <SignupPage />,
     action: signupAction,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    action: loginAction,
   },
   {
     path: "/logout",

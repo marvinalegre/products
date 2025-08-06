@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Form, Link, useActionData, useNavigation } from "react-router";
 import clsx from "clsx";
 
-export function SignupForm({ className, ...props }) {
+export function LoginForm({ className, ...props }) {
   const errors = useActionData();
   const navigation = useNavigation();
 
@@ -68,13 +68,13 @@ export function SignupForm({ className, ...props }) {
                   className="w-full"
                   disabled={navigation.state !== "idle"}
                 >
-                  {navigation.state !== "idle" ? "Signing Up..." : "Sign Up"}
+                  {navigation.state !== "idle" ? "Logging In..." : "Log In"}
                 </Button>
               </div>
               <div className="text-center text-sm">
-                Already have an account?{" "}
-                <Link to="/login" className="underline underline-offset-4">
-                  Log in
+                Don't have an account?{" "}
+                <Link to="/signup" className="underline underline-offset-4">
+                  Sign up
                 </Link>
               </div>
             </div>

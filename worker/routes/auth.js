@@ -14,6 +14,7 @@ const nanoid = customAlphabet(
 );
 
 auth.use("/signup", validateCredentials);
+auth.use("/login", validateCredentials);
 auth.use("/me", async (c, next) => {
   const token = getCookie(c, "token");
   if (token == undefined) {
@@ -56,6 +57,38 @@ auth.post("/logout", (c) => {
   });
 
   return c.body(null, 204);
+});
+
+auth.post("/login", async (c) => {
+  const username = c.get("username");
+  const password = c.get("password");
+
+  const { results } = await c.env.DB.prepare(
+    "SELECT hashed_password, jwt_sub FROM users WHERE username = ?",
+  )
+    .bind(username.toLowerCase())
+    .all();
+
+  if (!results.length) {
+    return c.body(null, 401);
+  }
+  if (!(await bcrypt.compare(password, results[0].hashed_password))) {
+    console.log(password);
+    console.log(results[0].hashed_password);
+    return c.body(null, 401);
+  }
+
+  const sub = results[0].jwt_sub;
+  const token = await sign({ sub }, c.env.JWT_SECRET);
+  setCookie(c, "token", token, {
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    expires: new Date(Date.now() + 2_592_000_000 * 3),
+    sameSite: "Strict",
+  });
+
+  return c.body(null, 200);
 });
 
 auth.post("/signup", async (c) => {
