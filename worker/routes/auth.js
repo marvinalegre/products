@@ -15,6 +15,18 @@ const nanoid = customAlphabet(
 
 auth.use("/signup", validateCredentials);
 
+auth.post("/logout", (c) => {
+  setCookie(c, "token", "", {
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    expires: new Date(0),
+    sameSite: "Strict",
+  });
+
+  return c.body(null, 204);
+});
+
 auth.post("/signup", async (c) => {
   const username = c.get("username");
   const password = c.get("password");

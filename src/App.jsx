@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFetcher } from "react-router";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Button } from "@/components/ui/button";
 function App() {
   const [count, setCount] = useState(0);
   const [name, setName] = useState("unknown");
+  const fetcher = useFetcher();
 
   return (
     <>
@@ -44,6 +46,9 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <fetcher.Form method="post" action="/logout">
+        <Button>log out</Button>
+      </fetcher.Form>
     </>
   );
 }
