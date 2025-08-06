@@ -5,24 +5,19 @@ import bcrypt from "bcryptjs";
 import { customAlphabet } from "nanoid";
 import { sign } from "hono/jwt";
 import { setCookie } from "hono/cookie";
-import { usernameSchema, passwordSchema } from "@/../libs/validation.js";
 import { reservedUsernames } from "@/../libs/reserved-usernames.js";
+import { validateCredentials } from "../middlewares/auth.js";
 
 const auth = new Hono();
 const nanoid = customAlphabet(
   "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
 );
 
-auth.post("/signup", async (c) => {
-  const { username, password } = await c.req.json();
+auth.use("/signup", validateCredentials);
 
-  try {
-    usernameSchema.parse(username);
-  } catch (e) {
-    if (e instanceof z.ZodError) {
-      return c.body(null, 400);
-    }
-  }
+auth.post("/signup", async (c) => {
+  const username = c.get("username");
+  const password = c.get("password");
 
   if (reservedUsernames.includes(username)) {
     return c.json({ username: "This username is not available." }, 409);
@@ -34,14 +29,6 @@ auth.post("/signup", async (c) => {
     .all();
   if (results.length) {
     return c.json({ username: "This username is not available." }, 409);
-  }
-
-  try {
-    passwordSchema.parse(password);
-  } catch (e) {
-    if (e instanceof z.ZodError) {
-      return c.body(null, 400);
-    }
   }
 
   const zxcvbnResult = zxcvbn(password);
