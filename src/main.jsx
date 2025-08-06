@@ -3,7 +3,8 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { PackageSearch } from "lucide-react";
 import "./index.css";
-import App from "./App.jsx";
+import { ThemeProvider } from "@/components/theme-provider";
+import Root from "@/components/routes/root";
 import SignupPage, {
   action as signupAction,
   loader as signupLoader,
@@ -17,7 +18,7 @@ import { action as logoutAction } from "@/components/routes/logout.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Root />,
     loader: async () => {
       const res = await fetch("/api/auth/me");
       if (res.status === 200) {
@@ -50,7 +51,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </StrictMode>,
 );
 

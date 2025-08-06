@@ -71,7 +71,7 @@ export function SignupForm({ className, ...props }) {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full text-md font-semibold"
+                  className="w-full text-md"
                   disabled={
                     navigation.state !== "idle" &&
                     navigation.location?.pathname === "/signup"
