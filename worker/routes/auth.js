@@ -3,8 +3,8 @@ import { z } from "zod";
 import zxcvbn from "zxcvbn";
 import bcrypt from "bcryptjs";
 import { customAlphabet } from "nanoid";
-import { sign } from "hono/jwt";
-import { setCookie } from "hono/cookie";
+import { sign, verify } from "hono/jwt";
+import { getCookie, setCookie } from "hono/cookie";
 import { reservedUsernames } from "@/../libs/reserved-usernames.js";
 import { validateCredentials } from "../middlewares/auth.js";
 
@@ -14,6 +14,37 @@ const nanoid = customAlphabet(
 );
 
 auth.use("/signup", validateCredentials);
+auth.use("/me", async (c, next) => {
+  const token = getCookie(c, "token");
+  if (token == undefined) {
+    return c.body(null, 401);
+  }
+
+  let sub;
+  try {
+    const decodedPayload = await verify(token, c.env.JWT_SECRET, "HS256");
+    sub = decodedPayload.sub;
+  } catch (e) {
+    console.error(e.message);
+    return c.body(null, 401);
+  }
+
+  const {
+    results: [user],
+  } = await c.env.DB.prepare(
+    "SELECT user_id, username FROM users WHERE jwt_sub = ?",
+  )
+    .bind(sub)
+    .all();
+
+  c.set("user", user);
+
+  await next();
+});
+
+auth.get("/me", (c) => {
+  return c.json({ username: c.get("user").username });
+});
 
 auth.post("/logout", (c) => {
   setCookie(c, "token", "", {

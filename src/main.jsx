@@ -12,6 +12,14 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    loader: async () => {
+      const res = await fetch("/api/auth/me");
+      if (res.status === 200) {
+        const { username } = await res.json();
+        return { username };
+      }
+      return { username: null };
+    },
   },
   {
     path: "/signup",
