@@ -17,5 +17,8 @@
   ],
   "vars": {
     "JWT_SECRET": "foobar"
+  },
+  "observability": {
+    "enabled": true
   }
 }
