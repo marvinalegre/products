@@ -1,0 +1,9 @@
+PRAGMA defer_foreign_keys=TRUE;
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    jwt_sub TEXT NOT NULL UNIQUE,
+    username TEXT NOT NULL UNIQUE,
+    hashed_password TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);

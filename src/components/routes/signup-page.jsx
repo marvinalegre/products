@@ -48,7 +48,7 @@ export async function action({ request }) {
     }
   }
 
-  const res = await fetch("/api/auth/login", {
+  const res = await fetch("/api/auth/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -58,6 +58,8 @@ export async function action({ request }) {
 
   if (res.status === 201) {
     return redirect("/");
+  } else if ([409, 422].includes(res.status)) {
+    return await res.json();
   } else {
     return { _form: "Something went wrong." };
   }

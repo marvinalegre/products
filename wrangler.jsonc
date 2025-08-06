@@ -1,8 +1,21 @@
 {
   "name": "products",
   "compatibility_date": "2025-07-23",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "assets": {
     "not_found_handling": "single-page-application"
   },
-  "main": "./worker/index.js"
+  "main": "./worker/index.js",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "products",
+      "database_id": "c2c21485-47cb-4a7a-ad32-6ddfb59e7d4d"
+    }
+  ],
+  "vars": {
+    "JWT_SECRET": "foobar"
+  }
 }
