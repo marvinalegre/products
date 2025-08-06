@@ -73,8 +73,6 @@ auth.post("/login", async (c) => {
     return c.body(null, 401);
   }
   if (!(await bcrypt.compare(password, results[0].hashed_password))) {
-    console.log(password);
-    console.log(results[0].hashed_password);
     return c.body(null, 401);
   }
 

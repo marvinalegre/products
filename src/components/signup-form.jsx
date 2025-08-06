@@ -15,7 +15,6 @@ import clsx from "clsx";
 export function SignupForm({ className, ...props }) {
   const errors = useActionData();
   const navigation = useNavigation();
-  console.log(navigation);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
