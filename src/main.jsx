@@ -13,6 +13,7 @@ import LoginPage, {
   action as loginAction,
   loader as loginLoader,
 } from "@/components/routes/login-page";
+import Index, { action as indexAction } from "@/components/routes/index";
 import { action as logoutAction } from "@/components/routes/logout";
 import UsersChart from "@/components/users-chart";
 
@@ -29,6 +30,19 @@ const router = createBrowserRouter([
       return { username: null };
     },
     children: [
+      {
+        index: true,
+        element: <Index />,
+        action: indexAction,
+        loader: async () => {
+          const res = await fetch("/api/auth/me");
+          if (res.status === 200) {
+            const { username } = await res.json();
+            return { username };
+          }
+          return { username: null };
+        },
+      },
       {
         path: "dashboard",
         element: (
