@@ -23,13 +23,15 @@ export function NavMain({ items }) {
     <SidebarGroup>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton tooltip="Products">
-            <Box />
-            <span>Products</span>
-          </SidebarMenuButton>
+          <Link to="/" tabIndex="-1">
+            <SidebarMenuButton tooltip="Products">
+              <Box />
+              <span>Products</span>
+            </SidebarMenuButton>
+          </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <Link to="/dashboard">
+          <Link to="/dashboard" tabIndex="-1">
             <SidebarMenuButton tooltip="Dashboard">
               <ChartLine />
               <span>Dashboard</span>
@@ -37,7 +39,7 @@ export function NavMain({ items }) {
           </Link>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <Link to="/settings">
+          <Link to="/settings" tabIndex="-1">
             <SidebarMenuButton tooltip="Settings">
               <Settings2 />
               <span>Settings</span>
