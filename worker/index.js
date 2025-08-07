@@ -4,6 +4,12 @@ import auth from "./routes/auth.js";
 const app = new Hono();
 
 app.route("/api/auth", auth);
+app.post("/api/products", async (c) => {
+  const sleep = (ms) =>
+    new Promise((resolve, reject) => setTimeout(resolve, ms));
+  await sleep(2000);
+  return c.body(null, 204);
+});
 app.get("/api/dashboard", async (c) => {
   const { results } = await c.env.DB.prepare(
     `
