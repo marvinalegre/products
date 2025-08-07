@@ -13,7 +13,8 @@ import LoginPage, {
   action as loginAction,
   loader as loginLoader,
 } from "@/components/routes/login-page";
-import { action as logoutAction } from "@/components/routes/logout.jsx";
+import { action as logoutAction } from "@/components/routes/logout";
+import UsersChart from "@/components/users-chart";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,24 @@ const router = createBrowserRouter([
       }
       return { username: null };
     },
+    children: [
+      {
+        path: "dashboard",
+        element: (
+          <div className="md:flex md:items-center md:justify-center">
+            <UsersChart />
+          </div>
+        ),
+        loader: async () => {
+          const res = await fetch("/api/dashboard");
+          return await res.json();
+        },
+      },
+      {
+        path: "settings",
+        element: <h1>settings</h1>,
+      },
+    ],
     HydrateFallback,
   },
   {

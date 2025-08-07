@@ -1,7 +1,7 @@
 "use client";
 
-import { Box, ChevronRight, Settings2 } from "lucide-react";
-
+import { Box, ChartLine, ChevronRight, Settings2 } from "lucide-react";
+import { Link } from "react-router";
 import {
   Collapsible,
   CollapsibleContent,
@@ -29,10 +29,20 @@ export function NavMain({ items }) {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <SidebarMenuButton tooltip="Settings">
-            <Settings2 />
-            <span>Settings</span>
-          </SidebarMenuButton>
+          <Link to="/dashboard">
+            <SidebarMenuButton tooltip="Dashboard">
+              <ChartLine />
+              <span>Dashboard</span>
+            </SidebarMenuButton>
+          </Link>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <Link to="/settings">
+            <SidebarMenuButton tooltip="Settings">
+              <Settings2 />
+              <span>Settings</span>
+            </SidebarMenuButton>
+          </Link>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
