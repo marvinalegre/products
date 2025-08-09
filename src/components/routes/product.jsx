@@ -1,6 +1,8 @@
-import { redirect, useLoaderData } from "react-router";
+import { redirect, useLoaderData, useParams, Link } from "react-router";
+import { MoveLeft } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableHeader,
@@ -12,10 +14,19 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 export default function () {
+  const { publicId } = useParams();
   const { product, history } = useLoaderData();
 
   return (
     <div className="space-y-6 p-4">
+      <Link to={`/`} className="block">
+        <Button size="lg" variant="ghost">
+          <MoveLeft />
+        </Button>
+      </Link>
+      <Link to={`/p/${publicId}/edit`}>
+        <Button>Edit</Button>
+      </Link>
       {/* Current product info */}
       <Card>
         <CardHeader>

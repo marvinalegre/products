@@ -13,6 +13,10 @@ import LoginPage, {
 } from "@/components/routes/login-page";
 import Index, { loader as indexLoader } from "@/components/routes/index";
 import { action as logoutAction } from "@/components/routes/logout";
+import EditProductForm, {
+  loader as editProductLoader,
+  action as editProductAction,
+} from "@/components/routes/edit-product-form";
 import AddProductForm, {
   loader as addProductLoader,
   action as addProductAction,
@@ -43,6 +47,12 @@ const router = createBrowserRouter([
         element: <AddProductForm />,
         loader: addProductLoader,
         action: addProductAction,
+      },
+      {
+        path: "p/:publicId/edit",
+        element: <EditProductForm />,
+        loader: editProductLoader,
+        action: editProductAction,
       },
       {
         path: "p/:publicId",

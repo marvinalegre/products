@@ -55,6 +55,59 @@ app.get("/", async (c) => {
   return c.json(results);
 });
 
+app.put("/", authenticateToken, async (c) => {
+  const { user_id, username } = c.get("user");
+  const { name, barcode, price, publicId } = await c.req.json();
+
+  try {
+    var {
+      success,
+      results: [{ product_id }],
+    } = await c.env.DB.prepare("SELECT * FROM products WHERE public_id = ?")
+      .bind(publicId)
+      .all();
+    if (!success) return c.body(null, 500);
+  } catch (e) {
+    console.error(e);
+    return c.body(null, 500);
+  }
+
+  let versionInsertResult;
+  try {
+    versionInsertResult = await c.env.DB.prepare(
+      "INSERT INTO product_versions (user_id, product_id, product_name, barcode, price) VALUES (?, ?, ?, ?, ?)",
+    )
+      .bind(
+        user_id,
+        product_id,
+        name,
+        !barcode ? null : barcode,
+        !price ? null : price,
+      )
+      .run();
+    if (!versionInsertResult.success) return c.body(null, 500);
+  } catch (e) {
+    console.error(e);
+    return c.body(null, 500);
+  }
+
+  const {
+    meta: { last_row_id: versionId },
+  } = versionInsertResult;
+  try {
+    await c.env.DB.prepare(
+      "UPDATE products SET current_version_id = ? WHERE product_id = ?",
+    )
+      .bind(versionId, product_id)
+      .run();
+  } catch (e) {
+    console.error(e);
+    return c.body(null, 500);
+  }
+
+  return c.body(null, 200);
+});
+
 app.post("/", authenticateToken, async (c) => {
   const { user_id, username } = c.get("user");
   const { name, barcode, price } = await c.req.json();
