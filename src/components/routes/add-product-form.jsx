@@ -30,6 +30,9 @@ export default function () {
         <DialogHeader className="mb-3">
           <DialogTitle>Create a product entry</DialogTitle>
         </DialogHeader>
+        {errors?._form && (
+          <p className="text-sm text-red-500 text-center">{errors?._form}</p>
+        )}
         <Form className="grid gap-4" method="post">
           <div className="grid gap-3">
             <Label htmlFor="name">Product name</Label>
@@ -100,18 +103,27 @@ export async function loader() {
 }
 
 export async function action({ request }) {
-  const formData = await request.formData();
+  const { name, barcode, price } = Object.fromEntries(await request.formData());
 
-  if (formData.get("name") === "") {
+  if (name === "") {
     return { name: "Please fill out this field" };
   }
-  if (formData.get("name").length > 150) {
+  if (name.length > 150) {
     return { name: "The produt name must contain at most 150 character(s)" };
   }
-  if (formData.get("barcode") && !validbarcode(formData.get("barcode"))) {
+  if (barcode && !validbarcode(barcode)) {
     return { barcode: "Invalid barcode" };
   }
 
-  await fetch("/api/products", { method: "post" });
-  return null;
+  const res = await fetch("/api/products", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, barcode, price }),
+  });
+  if (res.status === 201) {
+    return redirect("/");
+  }
+  return { _form: "Something went wrong." };
 }
