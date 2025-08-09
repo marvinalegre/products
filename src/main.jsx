@@ -16,6 +16,7 @@ import LoginPage, {
 import Index, { action as indexAction } from "@/components/routes/index";
 import { action as logoutAction } from "@/components/routes/logout";
 import UsersChart from "@/components/users-chart";
+import AddProductForm from "@/components/routes/add-product-form";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
           return { username: null };
         },
       },
+      { path: "addproduct", element: <AddProductForm /> },
       {
         path: "dashboard",
         element: (

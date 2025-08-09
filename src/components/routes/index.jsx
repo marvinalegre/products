@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFetcher, useLoaderData } from "react-router";
+import { useFetcher, useLoaderData, Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -38,67 +38,9 @@ export default function Index() {
   return (
     <>
       {username && (
-        <Dialog open={open} onOpenChange={setOpen}>
-          <form>
-            <DialogTrigger asChild>
-              <Button className="my-10">Add a product</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader className="mb-3">
-                <DialogTitle>Create a product entry</DialogTitle>
-              </DialogHeader>
-              <fetcher.Form className="grid gap-4" method="post">
-                <div className="grid gap-3">
-                  <Label htmlFor="name">Product name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    required
-                    disabled={fetcher.state !== "idle"}
-                  />
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="barcode">Barcode</Label>
-                  <Input
-                    id="barcode"
-                    name="barcode"
-                    required
-                    disabled={fetcher.state !== "idle"}
-                  />
-                </div>
-                <div className="grid gap-3">
-                  <Label htmlFor="price">Price</Label>
-                  <Input
-                    id="price"
-                    name="price"
-                    type="number"
-                    disabled={fetcher.state !== "idle"}
-                  />
-                </div>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button
-                      variant="outline"
-                      disabled={fetcher.state !== "idle"}
-                    >
-                      Cancel
-                    </Button>
-                  </DialogClose>
-                  <Button type="submit" disabled={fetcher.state !== "idle"}>
-                    {fetcher.state !== "idle" ? (
-                      <>
-                        <Loader2Icon className="animate-spin" />
-                        Please wait
-                      </>
-                    ) : (
-                      "Add product"
-                    )}
-                  </Button>
-                </DialogFooter>
-              </fetcher.Form>
-            </DialogContent>
-          </form>
-        </Dialog>
+        <Link to="/addproduct">
+          <Button className="my-10">Add a product</Button>
+        </Link>
       )}
       <ProductTable products={products} />
     </>
