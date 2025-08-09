@@ -53,3 +53,12 @@ export default function Root() {
     </SidebarProvider>
   );
 }
+
+export async function loader() {
+  const res = await fetch("/api/auth/me");
+  if (res.status === 200) {
+    const { username } = await res.json();
+    return { username };
+  }
+  return { username: null };
+}

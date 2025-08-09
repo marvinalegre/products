@@ -1,6 +1,6 @@
 import { Link, redirect } from "react-router";
 import { LoginForm } from "@/components/login-form";
-import { PackageSearch } from "lucide-react";
+import { Box } from "lucide-react";
 import { usernameSchema, passwordSchema } from "@/../libs/validation";
 import { z } from "zod";
 
@@ -13,7 +13,7 @@ export default function LoginPage() {
           className="flex items-center gap-2 self-center font-bold text-xl"
         >
           <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <PackageSearch className="size-4" />
+            <Box className="size-4" />
           </div>
           products
         </Link>
