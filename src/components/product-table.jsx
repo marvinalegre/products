@@ -16,6 +16,7 @@ export default function ({ products }) {
           <TableHead className="w-[100px]">Product Name</TableHead>
           <TableHead>Barcode</TableHead>
           <TableHead className="text-right">Price</TableHead>
+          <TableHead>Last Edit</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -26,6 +27,7 @@ export default function ({ products }) {
             <TableCell className="text-right">
               {p.price ? `PHP ${p.price}` : p.price}
             </TableCell>
+            <TableCell>{p.username}</TableCell>
           </TableRow>
         ))}
       </TableBody>

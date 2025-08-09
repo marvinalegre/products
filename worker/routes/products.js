@@ -8,9 +8,11 @@ app.use("*", authenticateToken);
 app.get("/", async (c) => {
   const { results } = await c.env.DB.prepare(
     `
-      SELECT products.product_id, product_name, barcode, price FROM products
+      SELECT products.product_id, product_name, barcode, price, username FROM products
       LEFT JOIN product_versions
       ON products.current_version_id = product_versions.version_id
+      LEFT JOIN users
+      ON product_versions.user_id = users.user_id
     `,
   ).all();
 
