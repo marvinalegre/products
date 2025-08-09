@@ -1,6 +1,8 @@
 import { usernameSchema, passwordSchema } from "@/../libs/validation.js";
+import { getCookie } from "hono/cookie";
+import { verify } from "hono/jwt";
 
-export const authentiateToken = async (c, next) => {
+export const authenticateToken = async (c, next) => {
   const token = getCookie(c, "token");
   if (token == undefined) {
     return c.body(null, 401);
