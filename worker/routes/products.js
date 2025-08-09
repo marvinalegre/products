@@ -3,8 +3,6 @@ import { authenticateToken } from "../middlewares/auth.js";
 
 const app = new Hono();
 
-app.use("*", authenticateToken);
-
 app.get("/", async (c) => {
   const { results } = await c.env.DB.prepare(
     `
@@ -19,7 +17,7 @@ app.get("/", async (c) => {
   return c.json(results);
 });
 
-app.post("/", async (c) => {
+app.post("/", authenticateToken, async (c) => {
   const { user_id, username } = c.get("user");
   const { name, barcode, price } = await c.req.json();
 
