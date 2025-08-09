@@ -1,0 +1,108 @@
+import { redirect, useLoaderData } from "react-router";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
+
+export default function () {
+  const { product, history } = useLoaderData();
+
+  return (
+    <div className="space-y-6 p-4">
+      {/* Current product info */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">{product.product_name}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <p>
+            <strong>Barcode:</strong> {product.barcode || "—"}
+          </p>
+          <p>
+            <strong>Price:</strong>{" "}
+            {product.price ? `PHP ${product.price}` : "—"}
+          </p>
+          <p>
+            <strong>Last Updated:</strong>{" "}
+            {product.created_at
+              ? new Date(product.created_at).toLocaleString()
+              : "—"}
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Version history */}
+      <div>
+        <h2 className="text-xl font-semibold mb-2">History</h2>
+
+        {/* Desktop table */}
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Product Name</TableHead>
+                <TableHead>Barcode</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>User</TableHead>
+                <TableHead>Created At</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {history.map((v) => (
+                <TableRow key={v.version_id}>
+                  <TableCell>{v.product_name}</TableCell>
+                  <TableCell>{v.barcode || "—"}</TableCell>
+                  <TableCell>{v.price ? `PHP ${v.price}` : "—"}</TableCell>
+                  <TableCell>{v.username || "Unknown"}</TableCell>
+                  <TableCell>
+                    {new Date(v.created_at).toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Mobile view */}
+        <div className="space-y-3 md:hidden">
+          {history.map((v) => (
+            <Card key={v.version_id} className="p-3">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs text-muted-foreground">
+                  {new Date(v.created_at).toLocaleString()}
+                </span>
+              </div>
+              <p className="font-medium">{v.product_name}</p>
+              <p className="text-sm text-muted-foreground">
+                Barcode: {v.barcode || "—"}
+              </p>
+              <p className="text-sm">
+                Price: {v.price ? `PHP ${v.price}` : "—"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                By: {v.username || "Unknown"}
+              </p>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export async function loader({ params }) {
+  const { publicId } = params;
+
+  const res = await fetch(`/api/products/${publicId}`);
+
+  if (res.status !== 200) return redirect("/");
+
+  return await res.json();
+}

@@ -11,6 +11,7 @@ CREATE TABLE users (
 DROP TABLE IF EXISTS products;
 CREATE TABLE products (
     product_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    public_id TEXT NOT NULL,
     current_version_id INTEGER,
     FOREIGN KEY (current_version_id) REFERENCES product_versions(version_id)
 );

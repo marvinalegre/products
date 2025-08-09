@@ -17,6 +17,7 @@ import AddProductForm, {
   loader as addProductLoader,
   action as addProductAction,
 } from "@/components/routes/add-product-form";
+import Product, { loader as productLoader } from "@/components/routes/product";
 import Dashboard, {
   loader as dashboardLoader,
 } from "@/components/routes/dashboard";
@@ -42,6 +43,11 @@ const router = createBrowserRouter([
         element: <AddProductForm />,
         loader: addProductLoader,
         action: addProductAction,
+      },
+      {
+        path: "p/:publicId",
+        element: <Product />,
+        loader: productLoader,
       },
       {
         path: "dashboard",

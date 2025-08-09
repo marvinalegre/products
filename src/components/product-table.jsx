@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import {
   Table,
   TableBody,
@@ -8,6 +9,8 @@ import {
 } from "@/components/ui/table";
 
 export default function ProductTable({ products }) {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full overflow-x-auto rounded-lg border border-border shadow-sm">
       <Table className="hidden md:table">
@@ -22,7 +25,8 @@ export default function ProductTable({ products }) {
         <TableBody>
           {products.map((p, idx) => (
             <TableRow
-              key={p.product_id}
+              onClick={() => navigate(`/p/${p.public_id}`)}
+              key={p.public_id}
               className={idx % 2 === 0 ? "bg-background" : "bg-muted/50"}
             >
               <TableCell className="font-medium">{p.product_name}</TableCell>
@@ -55,7 +59,8 @@ export default function ProductTable({ products }) {
       <div className="space-y-4 md:hidden">
         {products.map((p, idx) => (
           <div
-            key={p.product_id}
+            key={p.public_id}
+            onClick={() => navigate(`/p/${p.public_id}`)}
             className="rounded-lg border border-border p-4 bg-background"
           >
             <div className="font-medium">{p.product_name}</div>

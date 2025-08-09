@@ -1,12 +1,50 @@
 import { Hono } from "hono";
 import { authenticateToken } from "../middlewares/auth.js";
+import { customAlphabet } from "nanoid";
+const nanoid = customAlphabet(
+  "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+);
 
 const app = new Hono();
+
+app.get("/:id", async (c) => {
+  const publicId = c.req.param("id");
+
+  const {
+    results: [product],
+  } = await c.env.DB.prepare(
+    `
+SELECT pv.product_name, pv.barcode, pv.price, pv.created_at, u.username, p.product_id
+FROM products p
+JOIN product_versions pv ON pv.version_id = p.current_version_id
+JOIN users u ON u.user_id = pv.user_id
+WHERE public_id = ?
+`,
+  )
+    .bind(publicId)
+    .run();
+
+  if (!product) return c.body(null, 404);
+
+  const { results: history } = await c.env.DB.prepare(
+    `
+    SELECT pv.version_id, pv.product_name, pv.barcode, pv.price, pv.created_at, u.username
+    FROM product_versions pv
+    JOIN users u ON u.user_id = pv.user_id
+    WHERE pv.product_id = ?
+    ORDER BY pv.created_at DESC
+`,
+  )
+    .bind(product.product_id)
+    .all();
+
+  return c.json({ product, history });
+});
 
 app.get("/", async (c) => {
   const { results } = await c.env.DB.prepare(
     `
-      SELECT products.product_id, product_name, barcode, price, username FROM products
+      SELECT public_id, product_name, barcode, price, username FROM products
       LEFT JOIN product_versions
       ON products.current_version_id = product_versions.version_id
       LEFT JOIN users
@@ -24,8 +62,10 @@ app.post("/", authenticateToken, async (c) => {
   let productInsertResult;
   try {
     productInsertResult = await c.env.DB.prepare(
-      "INSERT INTO products (current_version_id) VALUES (NULL)",
-    ).run();
+      "INSERT INTO products (current_version_id, public_id) VALUES (NULL, ?)",
+    )
+      .bind(nanoid())
+      .run();
     if (!productInsertResult.success) return c.body(null, 500);
   } catch (e) {
     console.error(e);
