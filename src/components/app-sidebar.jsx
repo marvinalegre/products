@@ -8,7 +8,7 @@ import {
   Map,
   PieChart,
 } from "lucide-react";
-
+import { Link } from "react-router";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -27,13 +27,17 @@ export function AppSidebar({ ...props }) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem
-            size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground p-2"
-          >
-            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-              <Box className="size-4" />
-            </div>
+          <SidebarMenuItem>
+            <Link to="/">
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground p-2"
+              >
+                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <Box className="size-4" />
+                </div>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
