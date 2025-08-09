@@ -1,3 +1,5 @@
+import UsersChart from "@/components/users-chart";
+
 export default function () {
   return (
     <div className="md:flex md:items-center md:justify-center">

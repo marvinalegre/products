@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 
-const dashboard = new Hono();
+const app = new Hono();
 
-dashboard.get("/api/dashboard", async (c) => {
+app.get("/", async (c) => {
   const { results } = await c.env.DB.prepare(
     `
 WITH RECURSIVE date_range(day) AS (
@@ -40,4 +40,4 @@ ORDER BY
   return c.json(results);
 });
 
-export default dashboard;
+export default app;
