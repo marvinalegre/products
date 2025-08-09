@@ -20,8 +20,8 @@ export default function ({ products }) {
       </TableHeader>
       <TableBody>
         {products.map((p) => (
-          <TableRow key={p.productId}>
-            <TableCell className="font-medium">{p.name}</TableCell>
+          <TableRow key={p.product_id}>
+            <TableCell className="font-medium">{p.product_name}</TableCell>
             <TableCell>{p.barcode}</TableCell>
             <TableCell className="text-right">
               {p.price ? `PHP ${p.price}` : p.price}

@@ -5,6 +5,18 @@ const app = new Hono();
 
 app.use("*", authenticateToken);
 
+app.get("/", async (c) => {
+  const { results } = await c.env.DB.prepare(
+    `
+      SELECT products.product_id, product_name, barcode, price FROM products
+      LEFT JOIN product_versions
+      ON products.current_version_id = product_versions.version_id
+    `,
+  ).all();
+
+  return c.json(results);
+});
+
 app.post("/", async (c) => {
   const { user_id, username } = c.get("user");
   const { name, barcode, price } = await c.req.json();
@@ -26,9 +38,15 @@ app.post("/", async (c) => {
   let versionInsertResult;
   try {
     versionInsertResult = await c.env.DB.prepare(
-      "INSERT INTO product_versions (product_id, product_name, barcode, price) VALUES (?, ?, ?, ?)",
+      "INSERT INTO product_versions (user_id, product_id, product_name, barcode, price) VALUES (?, ?, ?, ?, ?)",
     )
-      .bind(productId, name, !barcode ? null : barcode, !price ? null : price)
+      .bind(
+        user_id,
+        productId,
+        name,
+        !barcode ? null : barcode,
+        !price ? null : price,
+      )
       .run();
     if (!versionInsertResult.success) return c.body(null, 500);
   } catch (e) {

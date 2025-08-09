@@ -4,23 +4,9 @@ import { Button } from "@/components/ui/button";
 import ProductTable from "@/components/product-table.jsx";
 
 export default function Index() {
-  const { username } = useLoaderData();
+  const { username, products } = useLoaderData();
   const fetcher = useFetcher();
   const [open, setOpen] = useState(false);
-  const products = [
-    {
-      productId: 1,
-      name: "Argentina Corned Beef 175g",
-      barcode: "0748485800011",
-      price: null,
-    },
-    {
-      productId: 2,
-      name: "Ideal Australia Harvest Whole Rolled Oats 500g",
-      barcode: "4800030005466",
-      price: null,
-    },
-  ];
 
   return (
     <>
@@ -36,9 +22,11 @@ export default function Index() {
 
 export async function loader() {
   const res = await fetch("/api/auth/me");
+  const res2 = await fetch("/api/products");
+  const products = await res2.json();
   if (res.status === 200) {
     const { username } = await res.json();
-    return { username };
+    return { username, products };
   }
-  return { username: null };
+  return { username: null, products };
 }

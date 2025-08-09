@@ -23,5 +23,7 @@ CREATE TABLE product_versions (
     barcode TEXT,
     price REAL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    user_id INTEGER NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(product_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
