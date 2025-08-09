@@ -1,6 +1,7 @@
 import {
   Form,
   Link,
+  redirect,
   useLoaderData,
   useActionData,
   useNavigation,
@@ -88,6 +89,14 @@ export default function () {
       </DialogContent>
     </Dialog>
   );
+}
+
+export async function loader() {
+  const res = await fetch("/api/auth/me");
+  if (res.status !== 200) {
+    return redirect("/login");
+  }
+  return null;
 }
 
 export async function action({ request }) {

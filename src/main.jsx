@@ -14,6 +14,7 @@ import LoginPage, {
 import Index, { loader as indexLoader } from "@/components/routes/index";
 import { action as logoutAction } from "@/components/routes/logout";
 import AddProductForm, {
+  loader as addProductLoader,
   action as addProductAction,
 } from "@/components/routes/add-product-form";
 import Dashboard, {
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       {
         path: "addproduct",
         element: <AddProductForm />,
+        loader: addProductLoader,
         action: addProductAction,
       },
       {
