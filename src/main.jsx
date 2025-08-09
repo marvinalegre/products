@@ -11,12 +11,11 @@ import LoginPage, {
   loader as loginLoader,
   action as loginAction,
 } from "@/components/routes/login-page";
-import Index, {
-  loader as indexLoader,
-  action as indexAction,
-} from "@/components/routes/index";
+import Index, { loader as indexLoader } from "@/components/routes/index";
 import { action as logoutAction } from "@/components/routes/logout";
-import AddProductForm from "@/components/routes/add-product-form";
+import AddProductForm, {
+  action as addProductAction,
+} from "@/components/routes/add-product-form";
 import Dashboard, {
   loader as dashboardLoader,
 } from "@/components/routes/dashboard";
@@ -36,11 +35,11 @@ const router = createBrowserRouter([
         index: true,
         element: <Index />,
         loader: indexLoader,
-        action: indexAction,
       },
       {
         path: "addproduct",
         element: <AddProductForm />,
+        action: addProductAction,
       },
       {
         path: "dashboard",

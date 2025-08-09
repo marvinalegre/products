@@ -1,4 +1,12 @@
-import { Form, Link, useLoaderData, useNavigation } from "react-router";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useActionData,
+  useNavigation,
+} from "react-router";
+import clsx from "clsx";
+import validbarcode from "barcode-validator";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,10 +20,12 @@ import { Label } from "@/components/ui/label";
 import { Loader2Icon } from "lucide-react";
 
 export default function () {
+  const errors = useActionData();
   const navigation = useNavigation();
+
   return (
     <Dialog open={true}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent showCloseButton={false} className="sm:max-w-[425px]">
         <DialogHeader className="mb-3">
           <DialogTitle>Create a product entry</DialogTitle>
         </DialogHeader>
@@ -25,18 +35,24 @@ export default function () {
             <Input
               id="name"
               name="name"
-              required
               disabled={navigation.state !== "idle"}
+              className={clsx(errors?.name && "border-2 border-destructive")}
             />
+            {errors?.name && (
+              <p className="text-sm text-red-500 -mt-1">{errors?.name}</p>
+            )}
           </div>
           <div className="grid gap-3">
             <Label htmlFor="barcode">Barcode</Label>
             <Input
               id="barcode"
               name="barcode"
-              required
               disabled={navigation.state !== "idle"}
+              className={clsx(errors?.barcode && "border-2 border-red-500")}
             />
+            {errors?.barcode && (
+              <p className="text-sm text-red-500 -mt-1">{errors?.barcode}</p>
+            )}
           </div>
           <div className="grid gap-3">
             <Label htmlFor="price">Price</Label>
@@ -45,7 +61,11 @@ export default function () {
               name="price"
               type="number"
               disabled={navigation.state !== "idle"}
+              className={clsx(errors?.price && "border-2 border-destructive")}
             />
+            {errors?.price && (
+              <p className="text-sm text-red-500 -mt-1">{errors?.price}</p>
+            )}
           </div>
           <DialogFooter>
             <Link to="/">
@@ -68,4 +88,24 @@ export default function () {
       </DialogContent>
     </Dialog>
   );
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+
+  if (formData.get("name") === "") {
+    return { name: "Please fill out this field" };
+  }
+  if (formData.get("name").length > 150) {
+    return { name: "The produt name must contain at most 150 character(s)" };
+  }
+  if (!formData.get("barcode")) {
+    return { barcode: "Please fill out this field" };
+  }
+  if (!validbarcode(formData.get("barcode"))) {
+    return { barcode: "Invalid barcode" };
+  }
+
+  await fetch("/api/products", { method: "post" });
+  return null;
 }

@@ -1,20 +1,7 @@
 import { useState } from "react";
 import { useFetcher, useLoaderData, Link } from "react-router";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import ProductTable from "@/components/product-table.jsx";
-import { Loader2Icon } from "lucide-react";
 
 export default function Index() {
   const { username } = useLoaderData();
@@ -54,10 +41,4 @@ export async function loader() {
     return { username };
   }
   return { username: null };
-}
-
-export async function action() {
-  console.log("hit");
-  await fetch("/api/products", { method: "post" });
-  return null;
 }
