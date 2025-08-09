@@ -99,10 +99,7 @@ export async function action({ request }) {
   if (formData.get("name").length > 150) {
     return { name: "The produt name must contain at most 150 character(s)" };
   }
-  if (!formData.get("barcode")) {
-    return { barcode: "Please fill out this field" };
-  }
-  if (!validbarcode(formData.get("barcode"))) {
+  if (formData.get("barcode") && !validbarcode(formData.get("barcode"))) {
     return { barcode: "Invalid barcode" };
   }
 

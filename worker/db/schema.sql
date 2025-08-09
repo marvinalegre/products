@@ -20,7 +20,7 @@ CREATE TABLE product_versions (
     version_id INTEGER PRIMARY KEY AUTOINCREMENT,
     product_id INTEGER NOT NULL,
     product_name TEXT NOT NULL,
-    barcode TEXT NOT NULL,
+    barcode TEXT,
     price REAL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(product_id)
