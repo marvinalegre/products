@@ -3,7 +3,7 @@ import { Hono } from "hono";
 const app = new Hono();
 
 app.get("/", async (c) => {
-  const { results } = await c.env.DB.prepare(
+  const { results: users } = await c.env.DB.prepare(
     `
 WITH RECURSIVE date_range(day) AS (
   SELECT DATE((SELECT MIN(created_at) FROM users))
@@ -37,7 +37,31 @@ ORDER BY
 `,
   ).run();
 
-  return c.json(results);
+  const { results: products } = await c.env.DB.prepare(
+    `
+WITH first_versions AS (
+    SELECT 
+        product_id,
+        DATE(MIN(created_at)) AS creation_date
+    FROM product_versions
+    GROUP BY product_id
+),
+daily_counts AS (
+    SELECT 
+        creation_date,
+        COUNT(*) AS new_products
+    FROM first_versions
+    GROUP BY creation_date
+    ORDER BY creation_date
+)
+SELECT 
+    creation_date,
+    SUM(new_products) OVER (ORDER BY creation_date) AS total_products
+FROM daily_counts;
+  `,
+  ).run();
+
+  return c.json({ users, products });
 });
 
 export default app;

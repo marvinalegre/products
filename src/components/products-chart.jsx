@@ -22,17 +22,17 @@ export const description = "A line chart";
 const chartConfig = {
   desktop: {
     label: "Desktop",
-    color: "var(--chart-3)",
+    color: "var(--chart-2)",
   },
 };
 
-export default function UsersChart() {
-  const { users: dataset } = useLoaderData();
+export default function ProductsChart() {
+  const { products: dataset } = useLoaderData();
 
   return (
     <Card className="md:w-3/5">
       <CardHeader>
-        <CardTitle>Number of Users Over Time</CardTitle>
+        <CardTitle>Number of Products Over Time</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -43,14 +43,14 @@ export default function UsersChart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="signup_date"
+              dataKey="creation_date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               tickFormatter={(value) => value}
             />
             <YAxis
-              dataKey="total_users"
+              dataKey="total_products"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -61,7 +61,7 @@ export default function UsersChart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="total_users"
+              dataKey="total_products"
               type="monotone"
               stroke="var(--color-desktop)"
               strokeWidth={2}
