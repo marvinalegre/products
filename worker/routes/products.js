@@ -44,7 +44,7 @@ WHERE public_id = ?
 app.get("/", async (c) => {
   const { results } = await c.env.DB.prepare(
     `
-      SELECT public_id, product_name, barcode, price, username FROM products
+      SELECT public_id, product_name, barcode, price, username, product_versions.created_at FROM products
       LEFT JOIN product_versions
       ON products.current_version_id = product_versions.version_id
       LEFT JOIN users

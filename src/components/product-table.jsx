@@ -42,12 +42,15 @@ export default function ProductTable({ products }) {
                   : "—"}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {p.last_edit
-                  ? new Date(p.last_edit).toLocaleDateString("en-PH", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
+                {p.created_at
+                  ? convertUTCToPHT(new Date(p.created_at)).toLocaleDateString(
+                      "en-PH",
+                      {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      },
+                    )
                   : "—"}
               </TableCell>
             </TableRow>
@@ -78,12 +81,15 @@ export default function ProductTable({ products }) {
             </div>
             <div className="text-sm text-muted-foreground">
               Last Edit:{" "}
-              {p.last_edit
-                ? new Date(p.last_edit).toLocaleDateString("en-PH", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })
+              {p.created_at
+                ? convertUTCToPHT(new Date(p.created_at)).toLocaleDateString(
+                    "en-PH",
+                    {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    },
+                  )
                 : "—"}
             </div>
           </div>
@@ -91,4 +97,25 @@ export default function ProductTable({ products }) {
       </div>
     </div>
   );
+}
+
+function convertUTCToPHT(date) {
+  // Ensure the input is a Date object
+  if (!(date instanceof Date)) {
+    throw new Error("Input must be a Date object");
+  }
+
+  // Philippine time zone offset in minutes (+8 hours * 60)
+  const PHT_OFFSET = 8 * 60;
+
+  // Get the time in milliseconds since epoch (UTC)
+  const utcTime = date.getTime();
+
+  // Calculate offset in milliseconds
+  const offsetMillis = PHT_OFFSET * 60 * 1000;
+
+  // Create new date adjusted for PHT
+  const phtDate = new Date(utcTime + offsetMillis);
+
+  return phtDate;
 }

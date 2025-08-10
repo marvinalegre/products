@@ -41,9 +41,9 @@ export default function () {
             {product.price ? `PHP ${product.price}` : "—"}
           </p>
           <p>
-            <strong>Last Updated:</strong>{" "}
+            <strong>Last Updated:</strong>
             {product.created_at
-              ? new Date(product.created_at).toLocaleString()
+              ? convertUTCToPHT(new Date(product.created_at)).toLocaleString()
               : "—"}
           </p>
         </CardContent>
@@ -73,7 +73,7 @@ export default function () {
                   <TableCell>{v.price ? `PHP ${v.price}` : "—"}</TableCell>
                   <TableCell>{v.username || "Unknown"}</TableCell>
                   <TableCell>
-                    {new Date(v.created_at).toLocaleString()}
+                    {convertUTCToPHT(new Date(v.created_at)).toLocaleString()}
                   </TableCell>
                 </TableRow>
               ))}
@@ -116,4 +116,25 @@ export async function loader({ params }) {
   if (res.status !== 200) return redirect("/");
 
   return await res.json();
+}
+
+function convertUTCToPHT(date) {
+  // Ensure the input is a Date object
+  if (!(date instanceof Date)) {
+    throw new Error("Input must be a Date object");
+  }
+
+  // Philippine time zone offset in minutes (+8 hours * 60)
+  const PHT_OFFSET = 8 * 60;
+
+  // Get the time in milliseconds since epoch (UTC)
+  const utcTime = date.getTime();
+
+  // Calculate offset in milliseconds
+  const offsetMillis = PHT_OFFSET * 60 * 1000;
+
+  // Create new date adjusted for PHT
+  const phtDate = new Date(utcTime + offsetMillis);
+
+  return phtDate;
 }
