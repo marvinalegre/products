@@ -12,6 +12,7 @@ import LoginPage, {
   action as loginAction,
 } from "@/components/routes/login-page";
 import Index, { loader as indexLoader } from "@/components/routes/index";
+import Lists, { loader as listsLoader } from "@/components/routes/lists";
 import { action as logoutAction } from "@/components/routes/logout";
 import EditProductForm, {
   loader as editProductLoader,
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
         index: true,
         element: <Index />,
         loader: indexLoader,
+      },
+      {
+        path: "lists",
+        element: <Lists />,
       },
       {
         path: "addproduct",
