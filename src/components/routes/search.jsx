@@ -3,6 +3,7 @@ import {
   Form,
   Link,
   redirect,
+  useSubmit,
   useLoaderData,
   useActionData,
   useNavigation,
@@ -21,11 +22,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 export default function () {
   const navigation = useNavigation();
   const navigate = useNavigate();
-  const products = [
-    { publicId: "asdf", name: "kikiam", price: 10 },
-    { publicId: "1sdf", name: "kikiam", price: null },
-  ];
+  const submit = useSubmit();
   const [inputValue, setInputValue] = useState("");
+  const { products, q } = useLoaderData();
 
   useEffect(() => {
     const handler = (e) => {
@@ -37,6 +36,13 @@ export default function () {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, []);
+  useEffect(() => {
+    const searchField = document.getElementById("q");
+    if (searchField instanceof HTMLInputElement) {
+      searchField.value = q || "";
+    }
+  }, [q]);
+
   return (
     <>
       <Dialog open={true}>
@@ -48,15 +54,23 @@ export default function () {
             <DialogTitle>Search products</DialogTitle>
           </VisuallyHidden>
           <XIcon onClick={() => navigate(-1)} />
-          <Form className="grid gap-4" method="post">
+          <Form
+            className="grid gap-4"
+            onChange={(e) => {
+              const isFirstSearch = q === null;
+              submit(e.currentTarget, {
+                replace: !isFirstSearch,
+              });
+            }}
+          >
             <div className="grid gap-3">
               <Input
-                value={inputValue}
+                id="q"
+                defaultValue={q || ""}
                 onChange={(e) => setInputValue(e.target.value)}
                 autoFocus
                 placeholder="Search products..."
-                name="search"
-                disabled={navigation.state !== "idle"}
+                name="q"
               />
             </div>
           </Form>
@@ -65,13 +79,13 @@ export default function () {
             {products.length > 0 ? (
               <ul className="list-none p-0">
                 {products.map((product) => (
-                  <li tabIndex="-1" key={product.publicId}>
+                  <li tabIndex="-1" key={product.public_id}>
                     <Link
                       tabIndex="0"
-                      to={`/p/${product.publicId}`}
+                      to={`/p/${product.public_id}`}
                       className="flex justify-between p-2 m-2"
                     >
-                      <span>{product.name}</span>
+                      <span>{product.product_name}</span>
                       <span>{product.price ? `₱${product.price}` : null}</span>
                     </Link>
                   </li>
@@ -85,4 +99,13 @@ export default function () {
       </Dialog>
     </>
   );
+}
+
+export async function loader({ request }) {
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const baseUrl = new URL(url.origin + "/api/search");
+  baseUrl.searchParams.set("q", q);
+  const res = await fetch(baseUrl);
+  return { products: await res.json(), q };
 }
