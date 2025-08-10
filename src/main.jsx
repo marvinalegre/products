@@ -25,6 +25,7 @@ import Product, { loader as productLoader } from "@/components/routes/product";
 import Dashboard, {
   loader as dashboardLoader,
 } from "@/components/routes/dashboard";
+import Search from "@/components/routes/search";
 
 import { Box } from "lucide-react";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
         element: <AddProductForm />,
         loader: addProductLoader,
         action: addProductAction,
+      },
+      {
+        path: "search",
+        element: <Search />,
       },
       {
         path: "p/:publicId/edit",
